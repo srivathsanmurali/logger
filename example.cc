@@ -1,4 +1,6 @@
+#ifndef REPORTING_LEVEL
 #define REPORTING_LEVEL DEBUG
+#endif
 #include "logger.h"
 
 int main() {

@@ -55,10 +55,11 @@ static const char* TColorCodesString[] = {
 class Log {
   private:
     TLoggerLevel messageLevel;
+    TColorCodes colorCode;
     std::ostringstream os;
 
   public:
-    Log():messageLevel(INFO) {}
+    Log():messageLevel(INFO), colorCode(RESET) {}
 
     std::ostringstream& get(TLoggerLevel level = INFO) {
       messageLevel = level;
@@ -68,13 +69,16 @@ class Log {
         TLoggerLevel level = INFO,
         TColorCodes color = RESET) {
       messageLevel = level;
-      os << TColorCodesString[color];
+      colorCode = color;
       return os;
     }
     ~Log() {
       if (messageLevel <= REPORTING_LEVEL) {
-        os << std::endl << TColorCodesString[RESET];
-        fprintf(stderr, "%s", os.str().c_str());
+        os << std::endl;
+        fprintf(stderr, "%s%s%s",
+          TColorCodesString[colorCode],
+          os.str().c_str(),
+          TColorCodesString[RESET]);
         fflush(stderr);
       }
     }
